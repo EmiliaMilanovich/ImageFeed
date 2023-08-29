@@ -8,12 +8,19 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
+    
+    private var avatarImageView: UIImageView!
+    private var logoutButton: UIButton?
+    private var nameLabel: UILabel?
+    private var loginNameLabel: UILabel?
+    private var descriptionLabel: UILabel?
+    
+    
     private func initAvatarImage(view: UIView) {
         view.backgroundColor = UIColor(named: "ypBlack")
         
         let avatarImage = UIImage(named: "avatar")
         let avatarImageView = UIImageView(image: avatarImage)
-        avatarImageView.tag = 1
         
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
@@ -21,6 +28,8 @@ final class ProfileViewController: UIViewController {
         avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
         avatarImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
         avatarImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        self.avatarImageView = avatarImageView
         
     }
     
@@ -36,7 +45,7 @@ final class ProfileViewController: UIViewController {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoutButton)
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
-        logoutButton.centerYAnchor.constraint(equalTo: view.viewWithTag(1)!.centerYAnchor).isActive = true
+        logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor).isActive = true
         
     }
     
@@ -48,8 +57,8 @@ final class ProfileViewController: UIViewController {
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nameLabel)
-        nameLabel.topAnchor.constraint(equalTo: view.viewWithTag(1)!.bottomAnchor, constant: 8).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: view.viewWithTag(1)!.leadingAnchor).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor).isActive = true
         
         let loginNameLabel = UILabel()
         loginNameLabel.text = "@ekaterina_nov"
@@ -63,6 +72,7 @@ final class ProfileViewController: UIViewController {
         loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
         
         let descriptionLabel = UILabel()
+        descriptionLabel.numberOfLines = 0
         descriptionLabel.text = "Hello, world!"
         descriptionLabel.textColor = UIColor(named: "ypWhite")
         descriptionLabel.font = UIFont.systemFont(ofSize: 13)

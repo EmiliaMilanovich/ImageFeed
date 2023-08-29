@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Tlb-Ne-Cii">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qf8-Kn-w3e">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1VP-Dr-XOR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1855.072463768116" y="783.48214285714278"/>
+            <point key="canvasLocation" x="1777" y="5"/>
         </scene>
         <!--AuthViewController-->
         <scene sceneID="leE-RY-iHF">
@@ -77,7 +77,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zLY-QT-K9Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-645" y="-453"/>
+            <point key="canvasLocation" x="1777" y="-715"/>
         </scene>
         <!--WebViewViewController-->
         <scene sceneID="a6K-4M-BEh">
@@ -107,25 +107,34 @@
                                     <action selector="didTapBackButton:" destination="bLa-e2-vHc" eventType="touchUpInside" id="QgB-xI-NUP"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="lWU-ZR-T8W">
+                                <rect key="frame" x="0.0" y="108" width="414" height="4"/>
+                                <color key="progressTintColor" name="ypBlack"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Egi-rW-daH"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="lWU-ZR-T8W" firstAttribute="top" secondItem="aXn-kL-vVR" secondAttribute="bottom" id="0KN-wR-LR1"/>
+                            <constraint firstItem="Egi-rW-daH" firstAttribute="trailing" secondItem="lWU-ZR-T8W" secondAttribute="trailing" id="2NU-Tf-Jpz"/>
                             <constraint firstAttribute="trailing" secondItem="qph-nP-ctp" secondAttribute="trailing" id="DGF-AR-sPT"/>
+                            <constraint firstItem="lWU-ZR-T8W" firstAttribute="leading" secondItem="czI-gH-qvU" secondAttribute="leading" id="F3A-Jx-wxh"/>
                             <constraint firstItem="qph-nP-ctp" firstAttribute="top" secondItem="czI-gH-qvU" secondAttribute="top" id="Ohc-AS-QOb"/>
                             <constraint firstItem="aXn-kL-vVR" firstAttribute="leading" secondItem="Egi-rW-daH" secondAttribute="leading" id="Pdy-Es-Q89"/>
+                            <constraint firstItem="lWU-ZR-T8W" firstAttribute="trailing" secondItem="czI-gH-qvU" secondAttribute="trailing" id="QfG-Xb-Qdo"/>
                             <constraint firstItem="aXn-kL-vVR" firstAttribute="top" secondItem="Egi-rW-daH" secondAttribute="top" id="T5v-V0-D8W"/>
                             <constraint firstAttribute="bottom" secondItem="qph-nP-ctp" secondAttribute="bottom" id="Vt0-yP-RAe"/>
                             <constraint firstItem="qph-nP-ctp" firstAttribute="leading" secondItem="czI-gH-qvU" secondAttribute="leading" id="rLv-BO-P7U"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="progressView" destination="lWU-ZR-T8W" id="USX-zc-kvZ"/>
                         <outlet property="webView" destination="qph-nP-ctp" id="pax-MU-qkU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ICg-Sv-6si" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="238" y="-453"/>
+            <point key="canvasLocation" x="2661" y="-715"/>
         </scene>
         <!--Single Image View Controller-->
         <scene sceneID="xiG-Qp-boN">
@@ -196,12 +205,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ar2-w6-8eh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2700" y="83.705357142857139"/>
+            <point key="canvasLocation" x="2661" y="739"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="IUr-oY-PEt">
             <objects>
-                <tabBarController id="YDr-6b-RaK" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="YDr-6b-RaK" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NuI-S1-dho">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -218,7 +227,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ceg-6f-76k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="934.78260869565224" y="426.5625"/>
+            <point key="canvasLocation" x="935" y="375"/>
         </scene>
         <!--ImageList-->
         <scene sceneID="tne-QT-ifu">
@@ -304,7 +313,36 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1855.072463768116" y="83.705357142857139"/>
+            <point key="canvasLocation" x="1777" y="739"/>
+        </scene>
+        <!--Unsplash-->
+        <scene sceneID="eBv-F3-3MD">
+            <objects>
+                <viewController id="qf8-Kn-w3e" userLabel="Unsplash" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KhS-8V-z1K">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="cC3-uj-2TM">
+                                <rect key="frame" x="171" y="411" width="73" height="75"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="bv2-pB-q6X"/>
+                        <color key="backgroundColor" name="ypBlack"/>
+                        <constraints>
+                            <constraint firstItem="cC3-uj-2TM" firstAttribute="centerX" secondItem="KhS-8V-z1K" secondAttribute="centerX" id="TXu-V9-WYq"/>
+                            <constraint firstItem="cC3-uj-2TM" firstAttribute="centerY" secondItem="KhS-8V-z1K" secondAttribute="centerY" id="ZIw-tz-vx1"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Unsplash" id="IT4-jR-LwQ" userLabel="Unsplash"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <segue destination="Tlb-Ne-Cii" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="YBa-nm-uCp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Vf-sf-hWI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="34.782608695652179" y="-180.13392857142856"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="yLk-gV-jG9">
@@ -322,11 +360,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="umG-NB-Gfv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1487" y="-453"/>
+            <point key="canvasLocation" x="935" y="-715"/>
         </scene>
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
+        <image name="Vector" width="73" height="76"/>
         <image name="auth_screen_logo" width="30" height="30"/>
         <image name="like_button_on" width="44" height="44"/>
         <image name="nav_back_button" width="24" height="24"/>
