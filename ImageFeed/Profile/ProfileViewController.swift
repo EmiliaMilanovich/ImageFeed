@@ -6,15 +6,67 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
+    private let profileService = ProfileService.shared
+
     private var avatarImageView: UIImageView!
-    private var logoutButton: UIButton?
-    private var nameLabel: UILabel?
-    private var loginNameLabel: UILabel?
-    private var descriptionLabel: UILabel?
+    private var logoutButton: UIButton!
+    private var nameLabel: UILabel!
+    private var loginNameLabel: UILabel!
+    private var descriptionLabel: UILabel!
+    private var profileImageServiceObserver: NSObjectProtocol?
+        
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initAvatarImage(view: view)
+        initLogoutButton(view: view)
+        initLabels(view: view)
+        
+        updateProfileDetails(profile: profileService.profile)
+    }
     
+    func updateProfileDetails(profile: Profile?) {
+        guard let profile = profile else { return }
+            nameLabel.text = profile.name ?? ""
+            loginNameLabel.text = profile.loginName
+            descriptionLabel.text = profile.bio ?? ""
+            
+            profileImageServiceObserver = NotificationCenter.default
+                .addObserver(
+                    forName: ProfileImageService.didChangeNotification,
+                    object: nil,
+                    queue: .main
+                ) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.updateAvatar()
+                }
+            updateAvatar()
+    }
+    
+    private func updateAvatar() {
+            guard
+                let profileImageURL = ProfileImageService.shared.avatarURL,
+                let imageURL = URL(string: profileImageURL)
+                    else { return }
+            let processor = RoundCornerImageProcessor(cornerRadius: 61)
+            avatarImageView.kf.indicatorType = .activity
+            avatarImageView.kf.setImage(with: imageURL,
+                                        placeholder: UIImage(named: "avatar_none"),
+                                        options: [.processor(processor)]) { result in
+                switch result {
+                    
+                case .success(let data):
+                    self.avatarImageView.image = data.image
+                    print("Success")
+                case .failure(_):
+                    print("Fail")
+                }
+            }
+            
+        }
     
     private func initAvatarImage(view: UIView) {
         view.backgroundColor = UIColor(named: "ypBlack")
@@ -30,7 +82,6 @@ final class ProfileViewController: UIViewController {
         avatarImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
         self.avatarImageView = avatarImageView
-        
     }
     
     private func initLogoutButton(view: UIView) {
@@ -46,7 +97,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
         logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor).isActive = true
-        
+        self.logoutButton = logoutButton
     }
     
     private func initLabels(view: UIView) {
@@ -59,6 +110,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor).isActive = true
+        self.nameLabel = nameLabel
         
         let loginNameLabel = UILabel()
         loginNameLabel.text = "@ekaterina_nov"
@@ -70,6 +122,7 @@ final class ProfileViewController: UIViewController {
         loginNameLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
         loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
         loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
+        self.loginNameLabel = loginNameLabel
         
         let descriptionLabel = UILabel()
         descriptionLabel.numberOfLines = 0
@@ -82,13 +135,7 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
         descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8).isActive = true
         descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
-    }
-        
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        initAvatarImage(view: view)
-        initLogoutButton(view: view)
-        initLabels(view: view)
+        self.descriptionLabel = descriptionLabel
     }
     
     @objc
