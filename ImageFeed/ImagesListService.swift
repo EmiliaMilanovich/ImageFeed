@@ -21,9 +21,8 @@ final class ImagesListService {
 
 
     func fetchPhotosNextPage() {
-        nextPageNumber()
+        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
 
-        assert(Thread.isMainThread)
         guard task == nil else { return }
         task?.cancel()
 
@@ -75,13 +74,5 @@ private extension ImagesListService {
             + "&&per_page=\(perPage)",
             httpMethod: "GET"
         )
-    }
-
-    func nextPageNumber() -> Int {
-        guard let lastLoadedPage = lastLoadedPage else {
-            return nextPage
-        }
-        nextPage = lastLoadedPage + 1
-        return nextPage
     }
 }
