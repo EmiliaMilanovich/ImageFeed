@@ -21,22 +21,23 @@ final class ImagesListService {
 
 
     func fetchPhotosNextPage() {
-        nextPageNumber()
+        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
 
         assert(Thread.isMainThread)
         guard task == nil else { return }
         task?.cancel()
 
         guard let token = token else { return }
-        var request: URLRequest? = photosRequest(page: nextPage, perPage: 10)
+        var request = photosRequest(page: nextPage, perPage: 10)
         request?.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
-        guard let request = request else { return }
+        guard let request = request else { return assertionFailure("Нет реквеста") }
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
-            guard let self = self else { return }
+            guard let self = self else { return assertionFailure("не селфится") }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let body):
+                    
                     body.forEach { photo in
                         self.photos.append(Photo(
                             id: photo.id,
@@ -68,20 +69,12 @@ final class ImagesListService {
 }
 
 private extension ImagesListService {
-    func photosRequest(page: Int, perPage: Int) -> URLRequest {
+    func photosRequest(page: Int, perPage: Int) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos?"
             + "page=\(page)"
             + "&&per_page=\(perPage)",
             httpMethod: "GET"
         )
-    }
-
-    func nextPageNumber() -> Int {
-        guard let lastLoadedPage = lastLoadedPage else {
-            return nextPage
-        }
-        nextPage = lastLoadedPage + 1
-        return nextPage
     }
 }
