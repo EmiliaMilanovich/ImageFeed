@@ -194,7 +194,6 @@
         <!--Tab Bar Controller-->
         <scene sceneID="IUr-oY-PEt">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ceg-6f-76k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tabBarController storyboardIdentifier="TabBarViewController" id="YDr-6b-RaK" customClass="TabBarController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NuI-S1-dho">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -206,6 +205,7 @@
                         </tabBarAppearance>
                     </tabBar>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ceg-6f-76k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="935" y="375"/>
         </scene>
@@ -247,6 +247,9 @@
                                                     <rect key="frame" x="350" y="11" width="44" height="44"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="like_button_on"/>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked:" destination="Tzp-dC-7EL" eventType="touchUpInside" id="1gl-kt-W1g"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" name="ypBlack"/>

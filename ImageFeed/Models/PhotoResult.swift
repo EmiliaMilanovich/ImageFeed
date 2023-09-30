@@ -29,6 +29,9 @@ struct PhotoResult: Codable {
 
 struct UrlsResult: Codable {
     let full: String
-    let small: String
     let thumb: String
+}
+
+struct PhotoLikeResult: Codable {
+    let photo: PhotoResult?
 }

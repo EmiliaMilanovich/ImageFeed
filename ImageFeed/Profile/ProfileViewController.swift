@@ -11,6 +11,8 @@ import Kingfisher
 final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    private let imagesListService = ImagesListService.shared
 
     private var avatarImageView: UIImageView!
     private var logoutButton: UIButton!
@@ -138,18 +140,38 @@ final class ProfileViewController: UIViewController {
         self.descriptionLabel = descriptionLabel
     }
     
+
     @objc
     private func didTapLogoutButton() {
-        for view in view.subviews {
-            if view is UILabel {
-                view.removeFromSuperview()
-            } else {
-                if let imageView = view as? UIImageView {
-                    imageView.image = UIImage(named: "avatar_none")
-                }
-            }
+        OAuth2TokenStorage().token = nil
+        WebViewViewController.clean()
+        cleanCache()
+                
+        guard let window = UIApplication.shared.windows.first else {
+            return assertionFailure("Invalid Configuration")
         }
+        window.rootViewController = SplashViewController()
     }
+    
+    private func cleanCache() {
+            let cache = ImageCache.default
+            cache.clearMemoryCache()
+            cache.clearDiskCache()
+        }
+    
+    private func showAlert() {
+            let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+            let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+                guard let self = self else { return }
+                self.didTapLogoutButton()
+            }
+            let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
+                alert.dismiss(animated: true)
+            }
+            alert.addAction(action1)
+            alert.addAction(action2)
+            self.present(alert, animated: true)
+        }
 }
 
 extension ProfileViewController {
