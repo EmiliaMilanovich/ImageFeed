@@ -67,7 +67,6 @@ final class ProfileViewController: UIViewController {
                     print("Fail")
                 }
             }
-            
         }
     
     private func initAvatarImage(view: UIView) {
@@ -75,6 +74,8 @@ final class ProfileViewController: UIViewController {
         
         let avatarImage = UIImage(named: "avatar")
         let avatarImageView = UIImageView(image: avatarImage)
+        avatarImageView.layer.cornerRadius = 35
+        avatarImageView.clipsToBounds = true
         
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
