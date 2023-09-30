@@ -91,8 +91,8 @@ final class ProfileViewController: UIViewController {
         let logoutButton = UIButton.systemButton(
                     with: UIImage(named: "logout_button")!,
                     target: self,
-                    action: #selector(Self.didTapLogoutButton)
-                    )
+                    action: #selector(showAlert)
+        )
         
         logoutButton.tintColor = UIColor(named: "ypRed")
         
@@ -160,19 +160,20 @@ final class ProfileViewController: UIViewController {
             cache.clearDiskCache()
         }
     
+    @objc
     private func showAlert() {
-            let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
-            let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-                guard let self = self else { return }
-                self.didTapLogoutButton()
-            }
-            let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
-                alert.dismiss(animated: true)
-            }
-            alert.addAction(action1)
-            alert.addAction(action2)
-            self.present(alert, animated: true)
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.didTapLogoutButton()
         }
+        let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
+    }
 }
 
 extension ProfileViewController {
