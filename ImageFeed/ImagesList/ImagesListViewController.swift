@@ -18,11 +18,11 @@ final class ImagesListViewController: UIViewController {
     private var imageListObserver: NSObjectProtocol?
     
     private lazy var dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .none
-            return formatter
-        }()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
 
     
     override func viewDidLoad() {
