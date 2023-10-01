@@ -70,6 +70,7 @@ final class SplashViewController: UIViewController {
 }
 
 extension SplashViewController: AuthViewControllerDelegate {
+    //после авторизации в веб вью
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
@@ -91,19 +92,20 @@ extension SplashViewController: AuthViewControllerDelegate {
             }
         }
     }
-    
+//    тут проблема
     private func fetchProfile(token: String) {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let data):
                 self.profileImageService.fetchProfileImageURL(token: token, username: data.username) { _ in }
+                UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
             case .failure:
+                UIBlockingProgressHUD.dismiss()
                 self.showLoginAlert()
                 break
             }
-            UIBlockingProgressHUD.dismiss()
         }
     }
     

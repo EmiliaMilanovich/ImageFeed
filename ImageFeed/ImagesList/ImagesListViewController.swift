@@ -77,9 +77,12 @@ extension ImagesListViewController: UITableViewDataSource {
         let placeholder = UIImage(named: "placeholder")
         let imageURL = URL(string: photoURL)
         
-        guard let date = imagesListService.photos[indexPath.row].createdAt else { return }
-        cell.dateLabel.text = dateFormatter.string(from: date)
-        
+        if let date = imagesListService.photos[indexPath.row].createdAt {
+            cell.dateLabel.text = dateFormatter.string(from: date)
+        } else {
+            cell.dateLabel.text = ""
+        }
+                
         cell.cellImage.kf.indicatorType = .activity
         cell.cellImage.kf.setImage(
             with: imageURL,

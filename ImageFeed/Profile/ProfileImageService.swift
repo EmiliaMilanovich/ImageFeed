@@ -50,7 +50,6 @@ final class ProfileImageService {
         self.task = task
         task.resume()
     }
-    
 }
 
 extension ProfileImageService {

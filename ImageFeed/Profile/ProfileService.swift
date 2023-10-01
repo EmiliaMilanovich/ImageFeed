@@ -46,6 +46,11 @@ final class ProfileService {
         task.resume()
     }
     
+    func cleanProfile() {
+            profile = nil
+            task = nil
+        }
+    
     private func makeFetchProfileRequest(token: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
     }

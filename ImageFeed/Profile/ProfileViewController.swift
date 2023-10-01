@@ -7,13 +7,14 @@
 
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private let imagesListService = ImagesListService.shared
-
+    
     private var avatarImageView: UIImageView!
     private var logoutButton: UIButton!
     private var nameLabel: UILabel!
@@ -147,17 +148,23 @@ final class ProfileViewController: UIViewController {
         OAuth2TokenStorage().token = nil
         WebViewViewController.clean()
         cleanCache()
+        cleanService()
                 
         guard let window = UIApplication.shared.windows.first else {
             return assertionFailure("Invalid Configuration")
         }
         window.rootViewController = SplashViewController()
+        window.makeKeyAndVisible()
     }
     
     private func cleanCache() {
-            let cache = ImageCache.default
-            cache.clearMemoryCache()
-            cache.clearDiskCache()
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+        }
+    
+    private func cleanService() {
+        profileService.cleanProfile()
         }
     
     @objc
