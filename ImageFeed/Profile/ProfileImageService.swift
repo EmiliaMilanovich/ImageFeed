@@ -24,9 +24,7 @@ final class ProfileImageService {
         var request: URLRequest? = profileImageURLRequest(username: username)
         request?.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        guard let request = request else {
-            return
-        }
+        guard let request = request else { return }
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
@@ -52,7 +50,6 @@ final class ProfileImageService {
         self.task = task
         task.resume()
     }
-    
 }
 
 extension ProfileImageService {

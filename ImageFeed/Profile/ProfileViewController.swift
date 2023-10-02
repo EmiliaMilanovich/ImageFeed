@@ -7,11 +7,14 @@
 
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
-
+    private let profileImageService = ProfileImageService.shared
+    private let imagesListService = ImagesListService.shared
+    
     private var avatarImageView: UIImageView!
     private var logoutButton: UIButton!
     private var nameLabel: UILabel!
@@ -65,7 +68,6 @@ final class ProfileViewController: UIViewController {
                     print("Fail")
                 }
             }
-            
         }
     
     private func initAvatarImage(view: UIView) {
@@ -73,6 +75,8 @@ final class ProfileViewController: UIViewController {
         
         let avatarImage = UIImage(named: "avatar")
         let avatarImageView = UIImageView(image: avatarImage)
+        avatarImageView.layer.cornerRadius = 35
+        avatarImageView.clipsToBounds = true
         
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
@@ -88,8 +92,8 @@ final class ProfileViewController: UIViewController {
         let logoutButton = UIButton.systemButton(
                     with: UIImage(named: "logout_button")!,
                     target: self,
-                    action: #selector(Self.didTapLogoutButton)
-                    )
+                    action: #selector(showAlert)
+        )
         
         logoutButton.tintColor = UIColor(named: "ypRed")
         
@@ -138,17 +142,44 @@ final class ProfileViewController: UIViewController {
         self.descriptionLabel = descriptionLabel
     }
     
+
     @objc
     private func didTapLogoutButton() {
-        for view in view.subviews {
-            if view is UILabel {
-                view.removeFromSuperview()
-            } else {
-                if let imageView = view as? UIImageView {
-                    imageView.image = UIImage(named: "avatar_none")
-                }
-            }
+        OAuth2TokenStorage().token = nil
+        WebViewViewController.clean()
+        cleanCache()
+        cleanService()
+                
+        guard let window = UIApplication.shared.windows.first else {
+            return assertionFailure("Invalid Configuration")
         }
+        window.rootViewController = SplashViewController()
+        window.makeKeyAndVisible()
+    }
+    
+    private func cleanCache() {
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+        }
+    
+    private func cleanService() {
+        profileService.cleanProfile()
+        }
+    
+    @objc
+    private func showAlert() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.didTapLogoutButton()
+        }
+        let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
     }
 }
 
