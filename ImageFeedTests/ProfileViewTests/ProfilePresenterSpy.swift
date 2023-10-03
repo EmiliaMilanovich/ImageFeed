@@ -19,7 +19,7 @@ final class ProfileViewPresenterSpy: ProfileViewPresenterProtocol {
     }
     
     func getAvatar() -> URL? {
-        return URL(string: "Test avatar URL")
+        return nil
     }
     
     func notificationProfileImage() {
