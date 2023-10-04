@@ -111,6 +111,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         view.addSubview(logoutButton)
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
         logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor).isActive = true
+        logoutButton.accessibilityIdentifier = "LogoutButton"
         self.logoutButton = logoutButton
     }
     

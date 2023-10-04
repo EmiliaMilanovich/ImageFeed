@@ -32,10 +32,11 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
         includeEstimatedProgressObservation()
+        webView.accessibilityIdentifier = "UnsplashWebView"
     }
     
     override func viewDidAppear(_ animated: Bool) {
