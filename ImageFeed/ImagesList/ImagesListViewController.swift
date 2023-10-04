@@ -8,7 +8,7 @@ import UIKit
 import Kingfisher
 
 //MARK: - Protocol
-public protocol ImagesListViewControllerProtocol {
+public protocol ImagesListViewControllerProtocol: AnyObject {
     var presenter: ImagesListViewPresenterProtocol? { get set }
     func updateTableViewAnimated(oldCount: Int, newCount: Int)
     func likeError()
@@ -108,7 +108,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let photos = presenter?.photos[indexPath.row] else { return 10 }
+        guard let photos = presenter?.getPhoto(indexPath: indexPath) else { return 10 }
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
         let imageWidth = photos.size.width

@@ -10,7 +10,6 @@ import Foundation
 
 final class ImagesListViewPresenterSpy: ImagesListViewPresenterProtocol {
     var view: ImagesListViewControllerProtocol?
-    var photos: [Photo] = []
     var viewDidLoadCalled = false
     var updateTableViewCalled = false
     var fetchPhotosCalled = false

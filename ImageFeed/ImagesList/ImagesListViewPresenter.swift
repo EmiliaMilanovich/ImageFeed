@@ -6,12 +6,10 @@
 //
 
 import Foundation
-import Kingfisher
 
 //MARK: - Protocol
 public protocol ImagesListViewPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
-    var photos: [Photo] { get set }
     func getLargeImageURL(indexPath: IndexPath) -> URL?
     func updateTableView()
     func viewDidLoad()
@@ -23,10 +21,10 @@ public protocol ImagesListViewPresenterProtocol {
 
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     //MARK: - Properties
-    var view: ImagesListViewControllerProtocol?
-    var photos: [Photo] = []
+    weak var view: ImagesListViewControllerProtocol?
     
     //MARK: - Private properties
+    private var photos: [Photo] = []
     private let imagesListService = ImagesListService.shared
     private var imageListObserver: NSObjectProtocol?
 
@@ -46,7 +44,7 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     }
     
     func getPhoto(indexPath: IndexPath) -> Photo? {
-        imagesListService.photos[indexPath.row]
+        return imagesListService.photos[indexPath.row]
     }
     
     func fetchPhotos(indexPath: IndexPath) {
