@@ -13,6 +13,7 @@ final class ImagesListService {
     
     private var lastLoadedPage = 0
     private var task: URLSessionTask?
+    private var likeTask: URLSessionTask?
     private (set) var photos: [Photo] = []
     
     private let urlSession = URLSession.shared
@@ -86,15 +87,15 @@ final class ImagesListService {
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Bool, Error>) -> Void) {
         
         assert(Thread.isMainThread)
-        guard task == nil else { return }
-        task?.cancel()
+        guard likeTask == nil else { return }
+        likeTask?.cancel()
 
         guard let token = token else { return }
         var requestLike: URLRequest? = isLike ? unlikeRequest(photoId: photoId) : likeRequest(photoId: photoId)
         requestLike?.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
         guard let requestLike = requestLike else { return }
-        let task = urlSession.objectTask(for: requestLike) { [weak self] (result: Result<PhotoLikeResult, Error>) in
+        let likeTask = urlSession.objectTask(for: requestLike) { [weak self] (result: Result<PhotoLikeResult, Error>) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch result {
@@ -114,14 +115,14 @@ final class ImagesListService {
                         self.photos[index] = newPhoto
                     }
                     completion(.success(likedByUser))
-                    self.task = nil
+                    self.likeTask = nil
                 case .failure(let error):
                     completion(.failure(error))
                 }
             }
         }
-        self.task = task
-        task.resume()
+        self.likeTask = likeTask
+        likeTask.resume()
         }
 }
 
