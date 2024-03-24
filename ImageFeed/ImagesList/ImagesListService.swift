@@ -7,34 +7,33 @@
 
 import UIKit
 
+//MARK: - ImagesListService
 final class ImagesListService {
+    
+    //MARK: - Properties
     static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
+    //MARK: - Private properties
     private var lastLoadedPage = 0
     private var task: URLSessionTask?
     private var likeTask: URLSessionTask?
     private (set) var photos: [Photo] = []
-    
     private let urlSession = URLSession.shared
     private let token = OAuth2TokenStorage().token
     private let dateFormatter = ISO8601DateFormatter()
-
-// загрузка очередной страницы с сервера
+    
+    //MARK: - Methods
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
-
-        // определяем номер след стр для закачки
         let nextPage = lastLoadedPage + 1
-
-        // если идет закачка, новый запрос не создается
         guard task == nil else { return }
         task?.cancel()
-
+        
         guard let token = token else { return }
         var request = photosRequest(page: nextPage, perPage: 10)
         request?.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
+        
         guard let request = request else {
             assertionFailure("Не сформировался запрос")
             return }
@@ -45,24 +44,22 @@ final class ImagesListService {
                 return
             }
             
-            //при получении новых фото массив обновляется из главного потока
             DispatchQueue.main.async {
                 switch result {
                 case .success(let photoResults):
                     for photoResult in photoResults {
                         self.photos.append(self.convert(photoResult))
                     }
-                self.lastLoadedPage = nextPage
+                    self.lastLoadedPage = nextPage
                     
-                //после обновления значения массива публикуется нотификация
-                NotificationCenter.default
-                    .post(
-                        name: ImagesListService.didChangeNotification,
-                        object: self,
-                        userInfo: ["Photos": self.photos])
+                    NotificationCenter.default
+                        .post(
+                            name: ImagesListService.didChangeNotification,
+                            object: self,
+                            userInfo: ["Photos": self.photos])
                     
-                self.task = nil
-
+                    self.task = nil
+                    
                 case .failure(let error):
                     print("Ошибка \(error), фото не добавлено в массив")
                 }
@@ -73,27 +70,26 @@ final class ImagesListService {
     }
     
     func convert(_ photoResult: PhotoResult) -> Photo {
-           Photo(
-               id: photoResult.id,
-               size: CGSize(width: photoResult.width, height: photoResult.height),
-               createdAt: dateFormatter.date(from: photoResult.createdAt ?? ""),
-               welcomeDescription: photoResult.description ?? "",
-               thumbImageURL: photoResult.urls.thumb,
-               largeImageURL: photoResult.urls.full,
-               isLiked: photoResult.likedByUser
-           )
-       }
+        Photo(
+            id: photoResult.id,
+            size: CGSize(width: photoResult.width, height: photoResult.height),
+            createdAt: dateFormatter.date(from: photoResult.createdAt ?? ""),
+            welcomeDescription: photoResult.description ?? "",
+            thumbImageURL: photoResult.urls.thumb,
+            largeImageURL: photoResult.urls.full,
+            isLiked: photoResult.likedByUser
+        )
+    }
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Bool, Error>) -> Void) {
-        
         assert(Thread.isMainThread)
         guard likeTask == nil else { return }
         likeTask?.cancel()
-
+        
         guard let token = token else { return }
         var requestLike: URLRequest? = isLike ? unlikeRequest(photoId: photoId) : likeRequest(photoId: photoId)
         requestLike?.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
+        
         guard let requestLike = requestLike else { return }
         let likeTask = urlSession.objectTask(for: requestLike) { [weak self] (result: Result<PhotoLikeResult, Error>) in
             DispatchQueue.main.async {
@@ -123,9 +119,10 @@ final class ImagesListService {
         }
         self.likeTask = likeTask
         likeTask.resume()
-        }
+    }
 }
 
+//MARK: - Extension
 private extension ImagesListService {
     func photosRequest(page: Int, perPage: Int) -> URLRequest? {
         URLRequest.makeHTTPRequest(
@@ -137,16 +134,16 @@ private extension ImagesListService {
     }
     
     func likeRequest(photoId: String) -> URLRequest {
-            URLRequest.makeHTTPRequest(
-                path: "/photos/\(photoId)/like",
-                httpMethod: "POST"
-            )
-        }
-        
-        func unlikeRequest(photoId: String) -> URLRequest {
-            URLRequest.makeHTTPRequest(
-                path: "/photos/\(photoId)/like",
-                httpMethod: "DELETE"
-            )
-        }
+        URLRequest.makeHTTPRequest(
+            path: "/photos/\(photoId)/like",
+            httpMethod: "POST"
+        )
+    }
+    
+    func unlikeRequest(photoId: String) -> URLRequest {
+        URLRequest.makeHTTPRequest(
+            path: "/photos/\(photoId)/like",
+            httpMethod: "DELETE"
+        )
+    }
 }

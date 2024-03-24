@@ -10,7 +10,6 @@ import Foundation
 import XCTest
 
 final class ProfileViewTests: XCTestCase {
-    //тестируем связь контроллера и презентера
     func testViewControllerCallsViewDidLoad() {
         //given
         let viewController = ProfileViewController()

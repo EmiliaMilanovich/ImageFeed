@@ -7,15 +7,19 @@
 
 import Foundation
 
+//MARK: - ProfileImageService
 final class ProfileImageService {
+    
+    //MARK: - Properties
     static let shared = ProfileImageService()
-    private let urlSession = URLSession.shared
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
+    //MARK: - Private properties
+    private let urlSession = URLSession.shared
     private (set) var avatarURL: String?
     private var task: URLSessionTask?
     
-    //для получения URL для маленькой версии аватарки пользователя
+    //MARK: - Methods
     func fetchProfileImageURL(token: String, username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         guard avatarURL == nil else { return }
@@ -52,6 +56,7 @@ final class ProfileImageService {
     }
 }
 
+//MARK: - Extension
 extension ProfileImageService {
     func profileImageURLRequest(username: String) -> URLRequest {
         URLRequest.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET")

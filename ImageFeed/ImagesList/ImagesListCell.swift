@@ -7,7 +7,9 @@
 import UIKit
 import Kingfisher
 
+//MARK: - ImagesListCell
 public final class ImagesListCell: UITableViewCell {
+    
     //MARK: - Properties
     static let reuseIdentifier = "ImagesListCell"
     weak var delegate: ImageListCellDelegate?
@@ -27,18 +29,12 @@ public final class ImagesListCell: UITableViewCell {
         return formatter
     }()
     
-    //MARK: - LifeCycle
+    //MARK: - Lifecycle
     public override func prepareForReuse() {
         super.prepareForReuse()
-        // отменяем загрузку, чтобы избежать багов при переиспользовании ячеек
         cellImage.kf.cancelDownloadTask()
     }
 
-    //MARK: - IBActions
-    @IBAction private func likeButtonClicked(_ sender: Any) {
-        delegate?.imageListCellDidTapLike(self)
-    }
-    
     //MARK: - Methods
     func setIsLiked(isLiked: Bool) {
         let likeImage = UIImage(named: isLiked ? "like_button_on" : "like_button_off")
@@ -69,6 +65,11 @@ public final class ImagesListCell: UITableViewCell {
                 }
             }
         return isConfigCell
+    }
+    
+    //MARK: - IBActions
+    @IBAction private func likeButtonClicked(_ sender: Any) {
+        delegate?.imageListCellDidTapLike(self)
     }
 }
 

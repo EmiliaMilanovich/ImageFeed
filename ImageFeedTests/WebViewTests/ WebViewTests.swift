@@ -9,7 +9,6 @@
 import XCTest
 
 final class WebViewTests: XCTestCase {
-    //тестируем связь контроллера и презентера
     func testViewControllerCallsViewDidLoad() {
         //given
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -22,10 +21,9 @@ final class WebViewTests: XCTestCase {
         _ = viewController.view
         
         //then
-        XCTAssertTrue(presenter.viewDidLoadCalled) //behaviour verification
+        XCTAssertTrue(presenter.viewDidLoadCalled)
     }
     
-    //тестируем, вызывает ли презентер после вызова presenter.viewDidLoad() метод loadRequest вьюконтроллера
     func testPresenterCallsLoadRequest() {
         //given
         let viewController = WebViewViewControllerSpy()
@@ -41,7 +39,6 @@ final class WebViewTests: XCTestCase {
         XCTAssertTrue(viewController.loadRequestCalled)
     }
     
-    //тестируем необходимость скрытия прогресса
     func testProgressVisibleWhenLessThenOne() {
         //given
         let authHelper = AuthHelper()
@@ -55,7 +52,6 @@ final class WebViewTests: XCTestCase {
         XCTAssertFalse(shouldHideProgress)
     }
     
-    //тестируем, что если значение прогресса равно единицы, то метод возвращает true
     func testProgressHiddenWhenOne() {
         //given
         let authHelper = AuthHelper() //Dummy
@@ -63,14 +59,12 @@ final class WebViewTests: XCTestCase {
         let progress: Float = 1.0
         
         //when
-        let shouldHideProgress = presenter.shouldHideProgress(for: progress) // return value verification
+        let shouldHideProgress = presenter.shouldHideProgress(for: progress)
         
         //then
         XCTAssertTrue(shouldHideProgress)
     }
     
-    //тестируем хелпер
-    //1. тестируем, что ссылка, полученная из authURL, содержит все необходимые компоненты
     func testAuthHelperAuthURL() {
         //given
         let configuration = AuthConfiguration.standard
@@ -88,7 +82,6 @@ final class WebViewTests: XCTestCase {
         XCTAssertTrue(urlString.contains(configuration.accessScope))
     }
     
-    //2. тестируем, что AuthHelper корректно распознаёт код из ссылки
     func testCodeFromURL() {
         //given
         var urlComponents = URLComponents(string: "https://unsplash.com/oauth/authorize/native")!

@@ -7,10 +7,21 @@
 
 import Foundation
 
+// MARK: - NetworkError
+enum NetworkError: Error {
+    case httpStatusCode(Int)
+    case urlRequestError(Error)
+    case urlSessionError
+}
+
+// MARK: - OAuth2Service
 final class OAuth2Service {
-    static let shared = OAuth2Service()
-    private let urlSession = URLSession.shared
     
+    // MARK: - Properties
+    static let shared = OAuth2Service()
+    
+    // MARK: - Private properties
+    private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
     
@@ -23,12 +34,13 @@ final class OAuth2Service {
         }
     }
     
+    // MARK: - Methods
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
+        
         if lastCode == code { return }
         task?.cancel()
         lastCode = code
-        
         let request = authTokenRequest(code: code)
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
@@ -51,6 +63,7 @@ final class OAuth2Service {
     }
 }
 
+// MARK: - Extension
 extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
@@ -64,10 +77,4 @@ extension OAuth2Service {
             baseURL: URL(string: "https://unsplash.com")!
         )
     }
-}
-
-enum NetworkError: Error {
-    case httpStatusCode(Int)
-    case urlRequestError(Error)
-    case urlSessionError
 }

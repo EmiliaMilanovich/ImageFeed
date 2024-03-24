@@ -8,27 +8,36 @@
 import UIKit
 import ProgressHUD
 
+// MARK: - SplashViewController
 final class SplashViewController: UIViewController {
+    
+    // MARK: - Properties
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+    
+    // MARK: - Private properties
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
-    
     private var alertPresenter = AlertPresenter()
     private var authViewController: AuthViewController?
     private var splashScreenImageView: UIImageView!
-
+    
+    
+    
+    // MARK: - Lifecycle
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
         if let token = oauth2TokenStorage.token {
             self.fetchProfile(token: token)
-            } else {
-                showAuthViewController()
+        } else {
+            showAuthViewController()
         }
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
@@ -36,41 +45,36 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-            
         view.backgroundColor = UIColor(named: "ypBlack")
         initSplashScreenImageView()
-        }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        .lightContent
     }
-
+    
+    // MARK: - Private methods
     private func switchToTabBarController() {
-        // Получаем экземпляр `Window` приложения
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        // Cоздаём экземпляр нужного контроллера из Storyboard с помощью ранее заданного идентификатора.
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController")
-        // Установим в `rootViewController` полученный контроллер
         window.rootViewController = tabBarController
     }
     
     private func initSplashScreenImageView() {
-            let splashScreenImageView = UIImageView(image: UIImage(named: "splash_screen_logo"))
-            splashScreenImageView.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(splashScreenImageView)
-            NSLayoutConstraint.activate([
-                splashScreenImageView.heightAnchor.constraint(equalToConstant: 75),
-                splashScreenImageView.widthAnchor.constraint(equalToConstant: 75),
-                splashScreenImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                splashScreenImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            ])
-            self.splashScreenImageView = splashScreenImageView
+        let splashScreenImageView = UIImageView(image: UIImage(named: "splash_screen_logo"))
+        splashScreenImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(splashScreenImageView)
+        NSLayoutConstraint.activate([
+            splashScreenImageView.heightAnchor.constraint(equalToConstant: 75),
+            splashScreenImageView.widthAnchor.constraint(equalToConstant: 75),
+            splashScreenImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashScreenImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        self.splashScreenImageView = splashScreenImageView
     }
 }
 
+// MARK: - Extension
 extension SplashViewController: AuthViewControllerDelegate {
-    //после авторизации в веб вью
+    
+    // MARK: - Methods
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
@@ -79,6 +83,7 @@ extension SplashViewController: AuthViewControllerDelegate {
         }
     }
     
+    // MARK: - Private methods
     private func fetchOAuthToken(_ code: String) {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             guard let self = self else { return }
@@ -92,7 +97,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             }
         }
     }
-
+    
     private func fetchProfile(token: String) {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
@@ -111,11 +116,11 @@ extension SplashViewController: AuthViewControllerDelegate {
     
     private func showLoginAlert() {
         let model = AlertModel(
-                    title: "Что-то пошло не так :(",
-                    message: "Не удалось войти в систему",
-                    buttonText: "ОК",
-                    completion: nil
-                )
+            title: "Что-то пошло не так :(",
+            message: "Не удалось войти в систему",
+            buttonText: "ОК",
+            completion: nil
+        )
         alertPresenter.showAlert(model)
     }
     
@@ -128,5 +133,3 @@ extension SplashViewController: AuthViewControllerDelegate {
         present(authViewController, animated: true)
     }
 }
-
-

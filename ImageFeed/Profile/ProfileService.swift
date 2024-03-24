@@ -7,13 +7,18 @@
 
 import Foundation
 
+//MARK: - ProfileService
 final class ProfileService {
-    static let shared = ProfileService()
-    private let urlSession = URLSession.shared
     
+    //MARK: - Properties
+    static let shared = ProfileService()
+    
+    //MARK: - Private properties
+    private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private (set) var profile: Profile?
     
+    //MARK: - Methods
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
         guard profile == nil else { return }
@@ -47,10 +52,11 @@ final class ProfileService {
     }
     
     func cleanProfile() {
-            profile = nil
-            task = nil
-        }
+        profile = nil
+        task = nil
+    }
     
+    //MARK: - Private methods
     private func makeFetchProfileRequest(token: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
     }

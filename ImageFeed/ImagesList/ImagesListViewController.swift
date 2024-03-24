@@ -7,14 +7,16 @@
 import UIKit
 import Kingfisher
 
-//MARK: - Protocol
+//MARK: - ImagesListViewControllerProtocol
 public protocol ImagesListViewControllerProtocol: AnyObject {
     var presenter: ImagesListViewPresenterProtocol? { get set }
     func updateTableViewAnimated(oldCount: Int, newCount: Int)
     func likeError()
 }
 
+//MARK: - ImagesListViewController
 final class ImagesListViewController: UIViewController & ImagesListViewControllerProtocol {
+    
     //MARK: - Properties
     var presenter: ImagesListViewPresenterProtocol?
     
@@ -42,6 +44,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
         }
     }
     
+    // MARK: - Methods
     func updateTableViewAnimated(oldCount: Int, newCount: Int) {
         tableView.performBatchUpdates {
             let indexPath = (oldCount..<newCount).map { i in
@@ -68,21 +71,14 @@ extension ImagesListViewController {
 
 // MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
-    //считает количество ячеек таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let presenter = presenter else { return 0 }
         return presenter.getPhotosCount()
     }
     
-    //создаём ячейку, наполняем её данными и передаём таблице
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //dequeueReusableCell - переиспользование ячеек
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-    
-        guard let imageListCell = cell as? ImagesListCell else {
-            return UITableViewCell()
-        }
-            
+        guard let imageListCell = cell as? ImagesListCell else { return UITableViewCell() }
         imageListCell.delegate = self
         
         guard let presenter = presenter,
@@ -102,7 +98,6 @@ extension ImagesListViewController: UITableViewDataSource {
 
 //MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
-    //действия при тапе по ячейке таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
     }
@@ -118,6 +113,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - Extension
 extension ImagesListViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         presenter?.fetchPhotos(indexPath: indexPath)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-//MARK: - Protocol
+//MARK: - ImagesListViewPresenterProtocol
 public protocol ImagesListViewPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
     func getLargeImageURL(indexPath: IndexPath) -> URL?
@@ -19,7 +19,9 @@ public protocol ImagesListViewPresenterProtocol {
     func getPhoto(indexPath: IndexPath) -> Photo?
 }
 
+//MARK: - ImagesListViewPresenter
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
+    
     //MARK: - Properties
     weak var view: ImagesListViewControllerProtocol?
     
@@ -27,8 +29,8 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     private var photos: [Photo] = []
     private let imagesListService = ImagesListService.shared
     private var imageListObserver: NSObjectProtocol?
-
-    //MARK: - LifeCycle
+    
+    //MARK: - Lifecycle
     func viewDidLoad() {
         imagesListService.fetchPhotosNextPage()
         notificationImagesList()
@@ -65,8 +67,8 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     func notificationImagesList() {
         imageListObserver = NotificationCenter.default
             .addObserver(forName: ImagesListService.didChangeNotification,
-                            object: imagesListService,
-                            queue: .main) {  _ in
+                         object: imagesListService,
+                         queue: .main) {  _ in
                 self.updateTableView()
             }
     }
@@ -80,9 +82,7 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
                 guard let self = self else { return }
                 switch result {
                 case .success:
-                    // Синхронизируем массив картинок с сервисом
                     self.photos = self.imagesListService.photos
-                    // Изменим индикацию лайка картинки
                     cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
                     UIBlockingProgressHUD.dismiss()
                 case .failure:

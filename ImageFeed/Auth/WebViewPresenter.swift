@@ -7,7 +7,7 @@
 
 import Foundation
 
-//MARK: - Protocol
+//MARK: - WebViewPresenterProtocol
 public protocol WebViewPresenterProtocol {
     var view: WebViewViewControllerProtocol? { get set }
     func viewDidLoad()
@@ -15,19 +15,20 @@ public protocol WebViewPresenterProtocol {
     func code(from url: URL) -> String?
 }
 
+//MARK: - WebViewPresenter
 final class WebViewPresenter: WebViewPresenterProtocol {
     
     //MARK: - Properties
     weak var view: WebViewViewControllerProtocol?
     var authHelper: AuthHelperProtocol
     
+    //MARK: - Initializers
     init(authHelper: AuthHelperProtocol) {
         self.authHelper = authHelper
     }
     
     //MARK: - LifeCycle
     func viewDidLoad() {
-        // инициализируем URLComponents и устанавливаем значения, которые хотим передать
         var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: AccessKey),
@@ -36,7 +37,6 @@ final class WebViewPresenter: WebViewPresenterProtocol {
             URLQueryItem(name: "scope", value: AccessScope)
         ]
         let url = urlComponents.url!
-        // передаем URL для загрузки
         let request = authHelper.authRequest()
         didUpdateProgressValue(0)
         view?.load(request: request)
@@ -46,17 +46,16 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     func didUpdateProgressValue(_ newValue: Double) {
         let newProgressValue = Float(newValue)
         view?.setProgressValue(newProgressValue)
-           
+        
         let shouldHideProgress = shouldHideProgress(for: newProgressValue)
         view?.setProgressHidden(shouldHideProgress)
     }
-       
+    
     func shouldHideProgress(for value: Float) -> Bool {
         abs(value - 1.0) <= 0.0001
-       }
+    }
     
     func code(from url: URL) -> String? {
         authHelper.code(from: url)
     }
 }
-

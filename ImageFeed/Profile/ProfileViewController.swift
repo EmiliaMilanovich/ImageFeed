@@ -9,14 +9,16 @@ import UIKit
 import Kingfisher
 import WebKit
 
-//MARK: - Protocol
+//MARK: - ProfileViewControllerProtocol
 public protocol ProfileViewControllerProtocol: AnyObject {
     var presenter: ProfileViewPresenterProtocol? { get set }
     func updateAvatar()
     func updateProfileDetails(profile: Profile?)
 }
 
+//MARK: - ProfileViewController
 final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+    
     //MARK: - Properties
     var presenter: ProfileViewPresenterProtocol?
     
@@ -26,7 +28,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     private var nameLabel: UILabel!
     private var loginNameLabel: UILabel!
     private var descriptionLabel: UILabel!
-        
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,9 +46,9 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         updateAvatar()
         
         guard let profile = profile else { return }
-            nameLabel.text = profile.name ?? ""
-            loginNameLabel.text = profile.loginName
-            descriptionLabel.text = profile.bio ?? ""
+        nameLabel.text = profile.name ?? ""
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio ?? ""
     }
     
     func updateAvatar() {
@@ -55,18 +57,16 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url,
                                     placeholder: UIImage(named: "avatar_none"),
-                                    options: [.processor(processor)]) 
+                                    options: [.processor(processor)])
     }
     
     //MARK: - IBAction
-    @objc
-    private func didTapLogoutButton() {
+    @objc private func didTapLogoutButton() {
         showAlert()
     }
     
     //MARK: - Private methods
-    @objc
-    private func showAlert() {
+    @objc private func showAlert() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
             guard let self = self else { return }
@@ -100,13 +100,12 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     
     private func initLogoutButton(view: UIView) {
         let logoutButton = UIButton.systemButton(
-                    with: UIImage(named: "logout_button")!,
-                    target: self,
-                    action: #selector(didTapLogoutButton)
+            with: UIImage(named: "logout_button")!,
+            target: self,
+            action: #selector(didTapLogoutButton)
         )
         
         logoutButton.tintColor = UIColor(named: "ypRed")
-        
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoutButton)
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true

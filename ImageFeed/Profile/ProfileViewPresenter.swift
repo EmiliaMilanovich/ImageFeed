@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Kingfisher
 
-//MARK: - Protocol
+//MARK: - ProfileViewPresenterProtocol
 public protocol ProfileViewPresenterProtocol {
     var view: ProfileViewControllerProtocol? { get set }
     func viewDidLoad()
@@ -17,7 +17,9 @@ public protocol ProfileViewPresenterProtocol {
     func getAvatar() -> URL?
 }
 
+//MARK: - ProfileViewPresenter
 final class ProfileViewPresenter: ProfileViewPresenterProtocol {
+    
     //MARK: - Properties
     weak var view: ProfileViewControllerProtocol?
     
@@ -74,5 +76,5 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     
     func cleanService() {
         profileService.cleanProfile()
-        }
+    }
 }

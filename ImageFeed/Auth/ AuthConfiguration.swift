@@ -11,7 +11,6 @@ let AccessKey = "tJD_vZzVklqpQRCkUiZ1H4zUIeBDjQMEaQJGQOLS3PM"
 let SecretKey = "LswLfPOf4GwEvPh_m9Qk3DsxZVwM-pgQFltL6abzh7o"
 let RedirectURI = "urn:ietf:wg:oauth:2.0:oob"
 let AccessScope = "public+read_user+write_likes"
-
 let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
 let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 
@@ -33,13 +32,11 @@ struct AuthConfiguration {
     }
     
     static var standard: AuthConfiguration {
-            return AuthConfiguration(accessKey: AccessKey,
-                                     secretKey: SecretKey,
-                                     redirectURI: RedirectURI,
-                                     accessScope: AccessScope,
-                                     authURLString: UnsplashAuthorizeURLString,
-                                     defaultBaseURL: DefaultBaseURL)
-        }
-    
-    //Если же нам понадобится тестовая конфигурация, можно будет сделать в AuthConfiguration статическую переменную test.
+        return AuthConfiguration(accessKey: AccessKey,
+                                 secretKey: SecretKey,
+                                 redirectURI: RedirectURI,
+                                 accessScope: AccessScope,
+                                 authURLString: UnsplashAuthorizeURLString,
+                                 defaultBaseURL: DefaultBaseURL)
+    }
 }
